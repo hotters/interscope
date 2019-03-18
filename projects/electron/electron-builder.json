@@ -1,0 +1,18 @@
+{
+  "directories": {
+    "app": "./dist/electron"
+  },
+  "files": [
+    "**/*",
+    {
+      "from": "node_modules/monaco-editor",
+      "to": "assets/monaco-editor/"
+    },
+    {
+      "from": "../dodger2",
+      "filter": [
+        "**/*"
+      ]
+    }
+  ]
+}

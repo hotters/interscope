@@ -1,0 +1,97 @@
+import {ProxyActions, ProxyActionTypes} from './proxy.actions';
+import {ClientRequest, ClientResponse} from 'proxy';
+
+
+export interface ProxyState {
+  exchanges: { [id: string]: ExchangeState };
+  selected: string;
+}
+
+export interface ExchangeState extends ClientRequest {
+
+  id: string;
+
+  response: ClientResponse;
+  modifiedResponse: ClientResponse;
+
+  pending: boolean;
+  modified: boolean;
+}
+
+const initialState: ProxyState = {
+  exchanges: {},
+  selected: null
+};
+
+export function reducer(state = initialState, action: ProxyActions): ProxyState {
+  switch (action.type) {
+
+    case ProxyActionTypes.AddRequest: {
+
+      return state.exchanges[action.id] ? state : {
+        ...state,
+        exchanges: {
+          ...state.exchanges,
+          [action.id]: {
+            ...action.payload,
+            id: action.id,
+            response: null,
+            modifiedResponse: null,
+            pending: true,
+            modified: false
+          }
+        }
+      };
+    }
+
+    case ProxyActionTypes.UpdateExchange: {
+      return {
+        ...state,
+        exchanges: {
+          ...state.exchanges,
+          [action.id]: {...state.exchanges[action.id], ...action.payload}
+        }
+      };
+    }
+
+    case ProxyActionTypes.AddResponse: {
+      return {
+        ...state,
+        exchanges: {
+          ...state.exchanges,
+          [action.id]: {
+            ...state.exchanges[action.id],
+            response: action.payload,
+            pending: false
+          }
+        }
+      };
+    }
+
+    case ProxyActionTypes.AddModifiedResponse: {
+      return {
+        ...state,
+        exchanges: {
+          ...state.exchanges,
+          [action.id]: {
+            ...state.exchanges[action.id],
+            modifiedResponse: action.payload,
+            modified: true
+          }
+        }
+      };
+    }
+
+    case ProxyActionTypes.SelectExchange: {
+      return {
+        ...state,
+        selected: action.id
+      };
+    }
+
+    default: {
+      return state;
+    }
+
+  }
+}

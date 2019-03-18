@@ -1,0 +1,59 @@
+<ng-container *ngIf="(request$ | async) as request">
+  <div class="info">
+    <h2>Request</h2>
+    <dl class="request">
+      <dt>General</dt>
+      <dd><span>URL</span>{{request.url}}</dd>
+      <dd><span>Method</span>{{request.method}}</dd>
+
+      <ng-container *ngTemplateOutlet="dd; context: {title: 'Headers', obj: request.headers}"></ng-container>
+
+      <ng-container *ngIf="request.body">
+        <dt>Body</dt>
+        <dd>{{request.body}}</dd>
+      </ng-container>
+    </dl>
+
+    <h2>Responses</h2>
+    <ng-container *ngIf="!request.pending && request.response; else loading">
+      <dl class="response">
+        <dt>General</dt>
+        <dd><span>Status</span>{{request.response.statusCode}} {{request.response.statusMessage}}</dd>
+
+        <ng-container *ngTemplateOutlet="dd; context: {title: 'Headers', obj: request.response.headers}"></ng-container>
+
+        <dt>Body
+          <mat-icon (click)="selectResponse(request.response)">edit</mat-icon>
+        </dt>
+        <dd>{{request.response.body}}</dd>
+      </dl>
+    </ng-container>
+
+    <div class="editor" *ngIf="selectedResponse">
+      <ngx-monaco-editor [(code)]="selectedResponse.body" [options]="editorOptions"></ngx-monaco-editor>
+      <div class="controls">
+        <button [disabled]="request.pending" (click)="onSave(request.id)" mat-raised-button>Save</button>
+        <button [disabled]="request.pending" (click)="onReset(request.id)" mat-raised-button>Reset</button>
+      </div>
+    </div>
+
+  </div>
+</ng-container>
+
+
+<ng-template #dd let-title="title" let-obj="obj">
+  <ng-container *ngIf="getObjectLength(obj)">
+    <dt>{{title}}</dt>
+    <dd *ngFor="let item of obj | keyvalue">
+      <span>{{item.key}}</span>{{item.value}}
+    </dd>
+  </ng-container>
+</ng-template>
+
+<ng-template #loading>
+  <mat-spinner class="center" [diameter]="50" [strokeWidth]="2"></mat-spinner>
+</ng-template>
+
+<ng-template #empty>
+  <div class="center empty">Not responded</div>
+</ng-template>

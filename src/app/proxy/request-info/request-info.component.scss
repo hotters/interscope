@@ -1,0 +1,54 @@
+.info {
+  h2 {
+    font-weight: lighter;
+    margin: 0 0 1rem;
+  }
+
+  dl {
+    margin-bottom: 2rem;
+
+    dt {
+      font-size: 1.1rem;
+      margin: 1.5rem 0 1rem;
+    }
+
+    dd {
+      font-size: 0.9rem;
+      margin: 0;
+
+      & > span {
+        text-transform: capitalize;
+        font-weight: bold;
+
+        &:after {
+          content: ':';
+        }
+      }
+    }
+  }
+
+  &:nth-last-child {
+    margin-bottom: 0;
+  }
+}
+
+.editor {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  height: 50vh;
+  flex-direction: column;
+
+  .controls {
+
+  }
+}
+
+.center {
+  margin: 50px auto;
+}
+
+.empty {
+  color: gray;
+  font-size: 0.9rem;
+}

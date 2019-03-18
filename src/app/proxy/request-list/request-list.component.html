@@ -1,0 +1,17 @@
+<div *ngFor="let request of requests; index as i">
+  <div (click)="onSelect(request.id)"
+       [class.selected]="request.id === selectedId"
+       class="request-item">
+    <div class="state">
+      <mat-spinner *ngIf="request.pending" [diameter]="15" [strokeWidth]="1"></mat-spinner>
+      <mat-icon (click)="removeModified(request.id)" *ngIf="request.modified" [inline]="true" class="icon">
+        edit
+      </mat-icon>
+    </div>
+    <span [ngStyle]="{'background-color': getMethodColor(request.method)}" class="method">
+      {{request.method}}
+    </span><span class="url">
+      {{request.url}}
+    </span>
+  </div>
+</div>

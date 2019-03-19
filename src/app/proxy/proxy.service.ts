@@ -1,13 +1,13 @@
-import {Injectable} from '@angular/core';
-import {select, Store} from '@ngrx/store';
-import {IncomingMessage, ServerResponse} from 'http';
-import {ClientResponse, HttpMethod, HttpProxy} from 'proxy';
-import {first, tap} from 'rxjs/operators';
-import {AppService} from '../app.service';
-import {ElectronService} from '../electron.service';
-import {AppState} from '../store/app.state';
-import {AddRequest, AddResponse} from './store/proxy.actions';
-import {ExchangeState} from './store/proxy.reducer';
+import { Injectable } from '@angular/core';
+import { select, Store } from '@ngrx/store';
+import { IncomingMessage, ServerResponse } from 'http';
+import { ClientResponse, HttpMethod, HttpProxy } from 'proxy';
+import { first, tap } from 'rxjs/operators';
+import { AppService } from '../app.service';
+import { ElectronService } from '../electron.service';
+import { AppState } from '../store/app.state';
+import { AddRequest, AddResponse } from './store/proxy.actions';
+import { ExchangeState } from './store/proxy.reducer';
 
 
 @Injectable({
@@ -32,7 +32,7 @@ export class ProxyService {
     this.proxy = new HttpProxy(
       this.modifyResponse.bind(this),
       this.onResponse.bind(this),
-      () => this.appService.showNotification({body: 'Proxy Started Success'}),
+      () => this.appService.showNotification({ body: 'Proxy Started Success' }),
       error => console.log(error)
     );
   }
@@ -43,7 +43,7 @@ export class ProxyService {
 
 
   private modifyResponse(req: IncomingMessage & { body?: any, method: keyof typeof HttpMethod, id: string }, res: ServerResponse) {
-    this.store.dispatch(new AddRequest(req.id, {url: req.url, method: req.method, headers: req.headers, body: req.body}));
+    this.store.dispatch(new AddRequest(req.id, { url: req.url, method: req.method, headers: req.headers, body: req.body }));
     return this.store.pipe(
       first(),
       select(state => state.proxy.exchanges[req.id]),

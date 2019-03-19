@@ -1,12 +1,12 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {select, Store} from '@ngrx/store';
-import {Observable} from 'rxjs';
-import {ProxyService} from '../proxy.service';
-import {SelectExchange, UpdateExchange} from '../store/proxy.actions';
-import {ExchangeState} from '../store/proxy.reducer';
-import {AppState} from 'src/app/store/app.state';
-import {HttpMethod} from 'proxy/models';
-import {map} from 'rxjs/operators';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { select, Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { ProxyService } from '../proxy.service';
+import { SelectExchange, UpdateExchange } from '../store/proxy.actions';
+import { ExchangeState } from '../store/proxy.reducer';
+import { AppState } from 'src/app/store/app.state';
+import { HttpMethod } from 'proxy';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'request-list',
@@ -79,10 +79,10 @@ export class RequestListComponent implements OnInit {
   }
 
   removeModified(id) {
-    this.store.dispatch(new UpdateExchange(id, {modifiedResponse: null, modified: false}));
+    this.store.dispatch(new UpdateExchange(id, { modifiedResponse: null, modified: false }));
   }
 
   onCLick() {
-    this.requests.push({id: 123});
+    this.requests.push({ id: 123 });
   }
 }

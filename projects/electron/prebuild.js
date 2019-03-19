@@ -6,7 +6,6 @@ fs.readFile(path, 'utf8', (err, data) => {
     path,
     data.replace(/'assets\/monaco-editor\/min\/vs'/g, '__dirname + \'/assets/monaco-editor/min/vs\''),
     'utf8',
-    err => {
-    }
+    err => console.log(err)
   );
 });

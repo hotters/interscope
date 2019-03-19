@@ -1,6 +1,6 @@
-import {Action} from '@ngrx/store';
-import {ExchangeState} from './proxy.reducer';
-import {ClientRequest, ClientResponse} from 'proxy';
+import { Action } from '@ngrx/store';
+import { ExchangeState } from './proxy.reducer';
+import { ClientRequest, ClientResponse } from 'proxy';
 
 
 export enum ProxyActionTypes {

@@ -1,5 +1,5 @@
-import {ProxyActions, ProxyActionTypes} from './proxy.actions';
-import {ClientRequest, ClientResponse} from 'proxy';
+import { ProxyActions, ProxyActionTypes } from './proxy.actions';
+import { ClientRequest, ClientResponse } from 'proxy';
 
 
 export interface ProxyState {
@@ -49,7 +49,7 @@ export function reducer(state = initialState, action: ProxyActions): ProxyState 
         ...state,
         exchanges: {
           ...state.exchanges,
-          [action.id]: {...state.exchanges[action.id], ...action.payload}
+          [action.id]: { ...state.exchanges[action.id], ...action.payload }
         }
       };
     }

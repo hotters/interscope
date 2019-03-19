@@ -1,12 +1,12 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {MonacoOptions} from '@materia-ui/ngx-monaco-editor';
-import {select, Store} from '@ngrx/store';
-import {Observable} from 'rxjs';
-import {AppState} from 'src/app/store/app.state';
-import {ProxyService} from '../proxy.service';
-import {AddModifiedResponse, UpdateExchange} from '../store/proxy.actions';
-import {ExchangeState} from '../store/proxy.reducer';
-import {tap} from 'rxjs/operators';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { MonacoOptions } from '@materia-ui/ngx-monaco-editor';
+import { select, Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { AppState } from 'src/app/store/app.state';
+import { ProxyService } from '../proxy.service';
+import { AddModifiedResponse, UpdateExchange } from '../store/proxy.actions';
+import { ExchangeState } from '../store/proxy.reducer';
+import { tap } from 'rxjs/operators';
 
 
 @Component({
@@ -22,7 +22,7 @@ export class RequestInfoComponent implements OnInit {
     language: 'json',
     readOnly: false,
     lineNumbers: true,
-    minimap: {enabled: false},
+    minimap: { enabled: false },
     theme: 'vs-light'
   };
   selectedResponse: any;
@@ -50,10 +50,10 @@ export class RequestInfoComponent implements OnInit {
   }
 
   selectResponse(res) {
-    this.selectedResponse = {...res};
+    this.selectedResponse = { ...res };
   }
 
   onReset(id: string) {
-    this.store.dispatch(new UpdateExchange(id, {modifiedResponse: null, modified: false}));
+    this.store.dispatch(new UpdateExchange(id, { modifiedResponse: null, modified: false }));
   }
 }

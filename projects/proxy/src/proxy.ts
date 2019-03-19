@@ -1,5 +1,5 @@
-import {IncomingMessage, ServerResponse} from 'http';
-import {ClientResponse} from 'proxy';
+import { IncomingMessage, ServerResponse } from 'http';
+import { ClientResponse } from './models';
 
 declare var window: Window;
 
@@ -27,7 +27,7 @@ export class HttpProxy {
     listenerHandler = () => console.log('[Proxy] Started'),
     private errorHandler = (error) => console.log('[Proxy] Error', error)
   ) {
-    this.proxy = Proxy.createProxyServer({changeOrigin: true});
+    this.proxy = Proxy.createProxyServer({ changeOrigin: true });
 
     Http.createServer((clientReq, clientRes) => {
       this.listener(clientReq, clientRes);
@@ -50,7 +50,7 @@ export class HttpProxy {
 
   private listener(clientReq: IncomingMessage & { body?: any, id?: string }, clientRes: ServerResponse) {
     const url = Url.parse(clientReq.url);
-    this.proxy.web(clientReq, clientRes, {target: `${url.protocol}//${url.host}`, changeOrigin: true});
+    this.proxy.web(clientReq, clientRes, { target: `${url.protocol}//${url.host}`, changeOrigin: true });
   }
 
   private onProxyResponse(res, clientReq: IncomingMessage, clientRes: ServerResponse) {

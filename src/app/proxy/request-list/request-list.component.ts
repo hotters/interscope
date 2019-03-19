@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { ProxyService } from '../proxy.service';
@@ -12,18 +12,16 @@ import { map } from 'rxjs/operators';
   selector: 'request-list',
   templateUrl: './request-list.component.html',
   styleUrls: ['./request-list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.Default
 })
 export class RequestListComponent implements OnInit {
 
   requests: any = [];
-  requests$: Observable<{ [id: number]: ExchangeState }>;
+  requests$: Observable<ExchangeState[]>;
   selectedId: string | null = null;
 
   constructor(
     private proxyService: ProxyService,
     private store: Store<AppState>,
-    private cd: ChangeDetectorRef
   ) {
   }
 
@@ -32,18 +30,11 @@ export class RequestListComponent implements OnInit {
       select(store => store.proxy.exchanges),
       map(i => Object.values(i)),
     );
-
-    this.requests$.subscribe((i: any) => {
-      this.requests = i;
-      console.log(this.requests);
-      this.cd.detectChanges();
-    });
   }
 
   onSelect(id: string) {
     this.selectedId = id !== this.selectedId ? id : null;
     this.store.dispatch(new SelectExchange(this.selectedId));
-    this.cd.detectChanges();
   }
 
   getMethodColor(method: HttpMethod): string {
@@ -75,7 +66,7 @@ export class RequestListComponent implements OnInit {
   }
 
   trackByFn(index, item) {
-    return item.key;
+    return item.id;
   }
 
   removeModified(id) {

@@ -1,4 +1,4 @@
-<div *ngFor="let request of requests; index as i">
+<div *ngFor="let request of requests$ | async; trackBy: trackByFn">
   <div (click)="onSelect(request.id)"
        [class.selected]="request.id === selectedId"
        class="request-item">

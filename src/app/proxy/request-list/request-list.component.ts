@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { ProxyService } from '../proxy.service';
-import { SelectExchange, UpdateExchange } from '../store/proxy.actions';
+import { ClearRequests, SelectExchange, UpdateExchange } from '../store/proxy.actions';
 import { ExchangeState } from '../store/proxy.reducer';
 import { AppState } from 'src/app/store/app.state';
 import { HttpMethod } from 'proxy';
@@ -15,7 +15,7 @@ import { map } from 'rxjs/operators';
 })
 export class RequestListComponent implements OnInit {
 
-  requests: any = [];
+  urlStr = '';
   requests$: Observable<ExchangeState[]>;
   selectedId: string | null = null;
 
@@ -69,11 +69,12 @@ export class RequestListComponent implements OnInit {
     return item.id;
   }
 
-  removeModified(id) {
+  reset(id) {
     this.store.dispatch(new UpdateExchange(id, { modifiedResponse: null, modified: false }));
   }
 
-  onCLick() {
-    this.requests.push({ id: 123 });
+  clear() {
+    this.store.dispatch(new ClearRequests());
   }
+
 }

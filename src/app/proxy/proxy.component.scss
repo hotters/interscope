@@ -1,16 +1,23 @@
 :host {
-  display: flex;
-  align-items: start;
   height: 100%;
+  display: grid;
+  grid-template: "list info info" minmax(50px, 10%) "list info info" minmax(300px, auto)
+   / 40% 30% 30%;
+}
+
+.toolbox {
+  grid-area: tlbx;
 }
 
 request-list {
+  grid-area: list;
   flex-basis: 40%;
   height: 100%;
   overflow-y: auto;
 }
 
 request-info {
+  grid-area: info;
   flex-basis: 60%;
   height: 100%;
   overflow-y: scroll;

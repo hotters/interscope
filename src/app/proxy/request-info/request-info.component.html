@@ -22,20 +22,15 @@
 
         <ng-container *ngTemplateOutlet="dd; context: {title: 'Headers', obj: request.response.headers}"></ng-container>
 
-        <dt>Body
-          <mat-icon (click)="selectResponse(request.response)">edit</mat-icon>
-        </dt>
-        <dd>{{request.response.body}}</dd>
+        <dt>Body</dt>
       </dl>
-    </ng-container>
-
-    <div class="editor" *ngIf="selectedResponse">
-      <ngx-monaco-editor [(code)]="selectedResponse.body" [options]="editorOptions"></ngx-monaco-editor>
-      <div class="controls">
-        <button [disabled]="request.pending" (click)="onSave(request.id)" mat-raised-button>Save</button>
-        <button [disabled]="request.pending" (click)="onReset(request.id)" mat-raised-button>Reset</button>
+      <div class="editor">
+        <ngx-monaco-editor [code]="request.response.body"
+                           (codeChange)="onCodeChange($event, request.id)"
+                           [options]="editorOptions">
+        </ngx-monaco-editor>
       </div>
-    </div>
+    </ng-container>
 
   </div>
 </ng-container>

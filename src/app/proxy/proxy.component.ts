@@ -1,22 +1,21 @@
-import {Component, OnInit} from '@angular/core';
-
-import {ProxyService} from './proxy.service';
-import {AppService} from '../app.service';
+import { Component } from '@angular/core';
+import { ProxyService } from './proxy.service';
+import { ElectronService } from '../electron.service';
 
 @Component({
   selector: 'app-proxy',
   templateUrl: './proxy.component.html',
   styleUrls: ['./proxy.component.scss']
 })
-export class ProxyComponent implements OnInit {
+export class ProxyComponent {
 
   constructor(
-    private appService: AppService,
+    private electron: ElectronService,
     private proxyService: ProxyService
   ) {
-  }
-
-  ngOnInit() {
+    if (this.electron.isElectron) {
+      this.proxyService.init();
+    }
   }
 
 }

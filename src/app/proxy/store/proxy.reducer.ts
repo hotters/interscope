@@ -1,5 +1,5 @@
 import { ProxyActions, ProxyActionTypes } from './proxy.actions';
-import { ClientRequest, ClientResponse } from 'proxy';
+import { ClientHttpRequest, ClientHttpResponse } from 'proxy';
 
 
 export interface ProxyState {
@@ -7,12 +7,12 @@ export interface ProxyState {
   selected: string;
 }
 
-export interface ExchangeState extends ClientRequest {
+export interface ExchangeState extends ClientHttpRequest {
 
   id: string;
 
-  response: ClientResponse;
-  modifiedResponse: ClientResponse;
+  response: ClientHttpResponse;
+  modifiedResponse: ClientHttpResponse;
 
   pending: boolean;
   modified: boolean;
@@ -86,6 +86,13 @@ export function reducer(state = initialState, action: ProxyActions): ProxyState 
       return {
         ...state,
         selected: action.id
+      };
+    }
+
+    case ProxyActionTypes.ClearRequests: {
+      return {
+        exchanges: {},
+        selected: null
       };
     }
 

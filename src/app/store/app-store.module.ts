@@ -9,7 +9,7 @@ import { environment } from '../../environments/environment';
   imports: [
     StoreModule.forRoot({}),
     EffectsModule.forRoot([]),
-    environment.production ? [] : StoreDevtoolsModule.instrument({maxAge: 25, logOnly: environment.production}),
+    environment.production ? [] : StoreDevtoolsModule.instrument({ maxAge: 100, logOnly: environment.production }),
   ],
   declarations: []
 })

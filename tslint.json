@@ -6,6 +6,7 @@
     "arrow-return-shorthand": true,
     "callable-types": true,
     "class-name": true,
+    "no-any": false,
     "comment-format": [
       true,
       "check-space"
@@ -31,7 +32,10 @@
       true,
       140
     ],
-    "member-access": false,
+    "member-access": [
+      true,
+      "no-public"
+    ],
     "member-ordering": [
       true,
       {
@@ -70,7 +74,7 @@
     "no-string-literal": false,
     "no-string-throw": true,
     "no-switch-case-fall-through": true,
-    "no-trailing-whitespace": true,
+    "no-trailing-whitespace": false,
     "no-unnecessary-initializer": true,
     "no-unused-expression": true,
     "no-use-before-declare": true,
@@ -91,7 +95,8 @@
     "radix": true,
     "semicolon": [
       true,
-      "always"
+      "always",
+      "ignore-bound-class-methods"
     ],
     "triple-equals": [
       true,
@@ -107,6 +112,7 @@
         "variable-declaration": "nospace"
       }
     ],
+    "typeof-compare": true,
     "unified-signatures": true,
     "variable-name": false,
     "whitespace": [
@@ -117,7 +123,18 @@
       "check-separator",
       "check-type"
     ],
-    "no-output-on-prefix": true,
+    "directive-selector": [
+      true,
+      "attribute",
+      "",
+      "camelCase"
+    ],
+    "component-selector": [
+      true,
+      "element",
+      "",
+      "kebab-case"
+    ],
     "use-input-property-decorator": true,
     "use-output-property-decorator": true,
     "use-host-property-decorator": true,
@@ -126,6 +143,7 @@
     "use-life-cycle-interface": true,
     "use-pipe-transform-interface": true,
     "component-class-suffix": true,
-    "directive-class-suffix": true
+    "directive-class-suffix": false,
+    "invoke-injectable": true
   }
 }

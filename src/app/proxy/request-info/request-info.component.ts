@@ -1,10 +1,10 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { MonacoOptions } from '@materia-ui/ngx-monaco-editor';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { AppState } from 'src/app/store/app.state';
 import { ProxyService } from '../proxy.service';
-import { AddModifiedResponse, UpdateExchange } from '../store/proxy.actions';
+import { AddModifiedResponse } from '../store/proxy.actions';
 import { ExchangeState } from '../store/proxy.reducer';
 import { tap } from 'rxjs/operators';
 
@@ -12,11 +12,14 @@ import { tap } from 'rxjs/operators';
 @Component({
   selector: 'request-info',
   templateUrl: './request-info.component.html',
-  styleUrls: ['./request-info.component.scss']
+  styleUrls: ['./request-info.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Default
 })
 export class RequestInfoComponent implements OnInit {
 
   request$: Observable<ExchangeState>;
+
+  firstChange = true;
 
   editorOptions: MonacoOptions = {
     language: 'json',
@@ -29,15 +32,14 @@ export class RequestInfoComponent implements OnInit {
 
   constructor(
     private proxyService: ProxyService,
-    private store: Store<AppState>,
-    private cd: ChangeDetectorRef
+    private store: Store<AppState>
   ) {
   }
 
   ngOnInit() {
     this.request$ = this.store.pipe(
       select(store => store.proxy.exchanges[store.proxy.selected]),
-      tap(() => this.cd.detectChanges())
+      tap(() => this.firstChange = true)
     );
   }
 
@@ -45,15 +47,11 @@ export class RequestInfoComponent implements OnInit {
     return typeof obj === 'object' ? Object.keys(obj).length : 0;
   }
 
-  onSave(id: string) {
-    this.store.dispatch(new AddModifiedResponse(id, this.selectedResponse));
-  }
-
-  selectResponse(res) {
-    this.selectedResponse = { ...res };
-  }
-
-  onReset(id: string) {
-    this.store.dispatch(new UpdateExchange(id, { modifiedResponse: null, modified: false }));
+  onCodeChange(str, id: string) {
+    if (!this.firstChange) {
+      this.store.dispatch(new AddModifiedResponse(id, this.selectedResponse));
+    } else {
+      this.firstChange = false;
+    }
   }
 }

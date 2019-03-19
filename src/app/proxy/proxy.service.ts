@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { IncomingMessage, ServerResponse } from 'http';
-import { ClientResponse, HttpMethod, HttpProxy } from 'proxy';
+import { ClientHttpResponse, HttpMethod, HttpProxy } from 'proxy';
 import { first, tap } from 'rxjs/operators';
 import { AppService } from '../app.service';
-import { ElectronService } from '../electron.service';
 import { AppState } from '../store/app.state';
 import { AddRequest, AddResponse } from './store/proxy.actions';
 import { ExchangeState } from './store/proxy.reducer';
@@ -20,12 +19,8 @@ export class ProxyService {
 
   constructor(
     private appService: AppService,
-    private electron: ElectronService,
     private store: Store<AppState>
   ) {
-    if (this.electron.isElectron) {
-      this.init();
-    }
   }
 
   init() {
@@ -41,14 +36,19 @@ export class ProxyService {
     this.modifiedResponses[id] = res;
   }
 
-
-  private modifyResponse(req: IncomingMessage & { body?: any, method: keyof typeof HttpMethod, id: string }, res: ServerResponse) {
-    this.store.dispatch(new AddRequest(req.id, { url: req.url, method: req.method, headers: req.headers, body: req.body }));
+  private modifyResponse(req: IncomingMessage & { body?: any, id: string }, res: ServerResponse) {
+    this.store.dispatch(new AddRequest(req.id, {
+      url: req.url,
+      method: <keyof typeof HttpMethod>req.method,
+      headers: req.headers,
+      body: req.body
+    }));
     return this.store.pipe(
       first(),
       select(state => state.proxy.exchanges[req.id]),
       tap((exchange: ExchangeState) => {
         if (exchange && exchange.modified) {
+          delete exchange.modifiedResponse.headers['content-length'];
           res.writeHead(exchange.modifiedResponse.statusCode, exchange.modifiedResponse.headers);
           res.end(exchange.modifiedResponse.body);
         }
@@ -56,7 +56,7 @@ export class ProxyService {
     ).toPromise();
   }
 
-  private onResponse(req, res: ClientResponse) {
+  private onResponse(req, res: ClientHttpResponse) {
     this.store.dispatch(new AddResponse(req.id, res));
   }
 

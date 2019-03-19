@@ -17,14 +17,14 @@ export interface ModifiedResponses {
   [id: string]: string;
 }
 
-export interface ClientResponse {
+export interface ClientHttpResponse {
   statusCode: number;
   statusMessage: string;
   headers: { [key: string]: any };
   body: any;
 }
 
-export interface ClientRequest {
+export interface ClientHttpRequest {
   method?: keyof typeof HttpMethod;
   url?: string;
   headers: { [key: string]: any };

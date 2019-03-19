@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 import { ExchangeState } from './proxy.reducer';
-import { ClientRequest, ClientResponse } from 'proxy';
+import { ClientHttpRequest, ClientHttpResponse } from 'proxy';
 
 
 export enum ProxyActionTypes {
@@ -9,27 +9,28 @@ export enum ProxyActionTypes {
   AddModifiedResponse = '[Proxy] AddModifiedResponse',
   UpdateExchange = '[Proxy] UpdateExchange',
   SelectExchange = '[Proxy] SelectExchange',
+  ClearRequests = '[Proxy] ClearRequests'
 }
 
 
 export class AddRequest implements Action {
   readonly type = ProxyActionTypes.AddRequest;
 
-  constructor(public id: string, public payload: ClientRequest) {
+  constructor(public id: string, public payload: ClientHttpRequest) {
   }
 }
 
 export class AddResponse implements Action {
   readonly type = ProxyActionTypes.AddResponse;
 
-  constructor(public id: string, public payload: ClientResponse) {
+  constructor(public id: string, public payload: ClientHttpResponse) {
   }
 }
 
 export class AddModifiedResponse implements Action {
   readonly type = ProxyActionTypes.AddModifiedResponse;
 
-  constructor(public id: string, public payload: ClientResponse) {
+  constructor(public id: string, public payload: ClientHttpResponse) {
   }
 }
 
@@ -47,11 +48,16 @@ export class SelectExchange implements Action {
   }
 }
 
+export class ClearRequests implements Action {
+  readonly type = ProxyActionTypes.ClearRequests;
+}
+
 
 export type ProxyActions
   = AddRequest
   | UpdateExchange
   | AddResponse
   | SelectExchange
-  | AddModifiedResponse;
+  | AddModifiedResponse
+  | ClearRequests;
 

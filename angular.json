@@ -150,7 +150,10 @@
           "builder": "@electron-schematics/build-electron:build",
           "options": {
             "relatedApp": "dodger2",
-            "webpackConfig": "projects/electron/webpack.config.js"
+            "webpackConfig": "projects/electron/webpack.config.js",
+            "deployUrl": "",
+            "baseHref": "",
+            "baseUrl": ""
           },
           "configurations": {
             "production": {

@@ -11,12 +11,12 @@ export class HttpProxy {
   private proxy;
 
   constructor(
-    private transform: (req: IncomingMessage & { body?: any, id?: string }, res: ServerResponse) => Promise<null>,
+    private transform: (proxyReq: ClientRequest, req: IncomingMessage & { body?: any, id?: string }, res: ServerResponse) => Promise<null>,
     private onResponse: (req: IncomingMessage, res: ClientHttpResponse) => void,
     listenerHandler = () => console.log('[Proxy] Started'),
     private errorHandler = (error) => console.log('[Proxy] Error', error)
   ) {
-    this.proxy = Proxy.createProxyServer({ changeOrigin: true });
+    this.proxy = Proxy.createProxyServer({ ws: true, changeOrigin: true });
 
     Http.createServer((clientReq, clientRes) => {
       this.listener(clientReq, clientRes);
@@ -36,7 +36,7 @@ export class HttpProxy {
       this.deleteRequestCacheHeaders(proxyReq);
       req.id = this.createId(req.method + req.url);
       req.body = await this.getBody(req);
-      await this.transform(req, res);
+      await this.transform(proxyReq, req, res);
     });
 
     this.proxy.on('proxyRes', (proxyRes, req, res) => {

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { IncomingMessage, ServerResponse } from 'http';
+import { ClientRequest, IncomingMessage, ServerResponse } from 'http';
 import { ClientHttpResponse, HttpMethod, HttpProxy } from 'proxy';
 import { first, tap } from 'rxjs/operators';
 import { AppService } from '../app.service';
@@ -25,7 +25,7 @@ export class ProxyService {
 
   init() {
     this.proxy = new HttpProxy(
-      this.modifyResponse.bind(this),
+      this.transform.bind(this),
       this.onResponse.bind(this),
       () => this.appService.showNotification({ body: 'Proxy Started Success' }),
       error => console.log(error)
@@ -36,7 +36,7 @@ export class ProxyService {
     this.modifiedResponses[id] = res;
   }
 
-  private modifyResponse(req: IncomingMessage & { body?: any, id: string }, res: ServerResponse) {
+  private transform(proxyReq: ClientRequest, req: IncomingMessage & { body?: any, id: string }, res: ServerResponse) {
     this.store.dispatch(new AddRequest(req.id, {
       url: req.url,
       method: <keyof typeof HttpMethod>req.method,
@@ -49,6 +49,7 @@ export class ProxyService {
       tap((exchange: ExchangeState) => {
         if (exchange && exchange.modified) {
           delete exchange.modifiedResponse.headers['content-length'];
+          proxyReq.abort();
           res.writeHead(exchange.modifiedResponse.statusCode, exchange.modifiedResponse.headers);
           res.end(exchange.modifiedResponse.body);
         }

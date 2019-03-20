@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { ProxyService } from '../proxy.service';
 import { ClearRequests, ResetModifiedRequest, SelectExchange } from '../store/proxy.actions';
-import { ExchangeState } from '../store/proxy.reducer';
 import { AppState } from 'src/app/store/app.state';
 import { HttpMethod } from 'proxy';
 import { map } from 'rxjs/operators';
@@ -13,10 +12,11 @@ import { map } from 'rxjs/operators';
   templateUrl: './request-list.component.html',
   styleUrls: ['./request-list.component.scss'],
 })
-export class RequestListComponent implements OnInit {
+export class RequestListComponent implements OnInit, OnDestroy {
 
   urlStr = '';
-  requests$: Observable<ExchangeState[]>;
+  requests = [];
+  requests$: Subscription;
   selectedId: string | null = null;
 
   constructor(
@@ -28,8 +28,8 @@ export class RequestListComponent implements OnInit {
   ngOnInit() {
     this.requests$ = this.store.pipe(
       select(store => store.proxy.exchanges),
-      map(i => Object.values(i)),
-    );
+      map(i => Object.values(i).map(({ id, pending, modified, method, url }) => ({ id, pending, modified, method, url })))
+    ).subscribe(i => this.requests = i);
   }
 
   onSelect(id: string) {
@@ -76,6 +76,10 @@ export class RequestListComponent implements OnInit {
 
   clear() {
     this.store.dispatch(new ClearRequests());
+  }
+
+  ngOnDestroy(): void {
+    this.requests$.unsubscribe();
   }
 
 }

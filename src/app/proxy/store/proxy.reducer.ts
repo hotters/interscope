@@ -36,8 +36,8 @@ export function reducer(state = initialState, action: ProxyActions): ProxyState 
             ...action.payload,
             id: action.id,
             response: null,
-            modifiedResponse: null,
             pending: true,
+            modifiedResponse: null,
             modified: false
           }
         }

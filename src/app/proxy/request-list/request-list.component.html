@@ -11,13 +11,18 @@
   </button>
 </div>
 
-<div *ngFor="let request of requests$ | async; trackBy: trackByFn"
+<div *ngFor="let request of requests | search:urlStr; trackBy: trackByFn"
      (click)="onSelect(request.id)"
      [class.selected]="request.id === selectedId"
      class="request-item">
   <div class="state">
     <mat-spinner *ngIf="request.pending" [diameter]="15" [strokeWidth]="1"></mat-spinner>
-    <mat-icon *ngIf="request.modified" (click)="reset($event, request.id)" [inline]="true" class="icon">edit</mat-icon>
+    <mat-icon *ngIf="request.modified"
+              (click)="reset($event, request.id)"
+              [inline]="true"
+              class="icon edit">edit
+    </mat-icon>
+    <mat-icon *ngIf="!request.pending && !request.modified" [inline]="true" class="icon done">done</mat-icon>
   </div>
   <span [ngStyle]="{'background-color': getMethodColor(request.method)}" class="method">
       {{request.method}}
@@ -25,3 +30,4 @@
       {{request.url}}
     </span>
 </div>
+

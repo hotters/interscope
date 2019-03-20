@@ -6,7 +6,7 @@ import { AppState } from 'src/app/store/app.state';
 import { ProxyService } from '../proxy.service';
 import { AddModifiedResponse } from '../store/proxy.actions';
 import { ExchangeState } from '../store/proxy.reducer';
-import { debounceTime, tap } from 'rxjs/operators';
+import { debounceTime, filter, tap } from 'rxjs/operators';
 import { ClientHttpResponse } from 'proxy';
 
 
@@ -22,9 +22,10 @@ export class RequestInfoComponent implements OnInit, OnDestroy {
   codeChanged$ = new Subject<[string, ClientHttpResponse]>();
   isInitChange = true;
   body = '';
+  selectedRequestId = '';
 
   editorOptions: MonacoOptions = {
-    language: 'json',
+    language: 'text',
     readOnly: false,
     lineNumbers: true,
     minimap: { enabled: false },
@@ -38,16 +39,23 @@ export class RequestInfoComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
     this.request$ = this.store.pipe(
+      filter(store => {
+        if ((this.selectedRequestId && this.selectedRequestId !== store.proxy.selected) || !this.selectedRequestId) {
+          this.selectedRequestId = store.proxy.selected;
+          return true;
+        }
+        return false;
+      }),
       select(store => store.proxy.exchanges[store.proxy.selected]),
       tap(v => {
         if (v && v.response) {
-          this.body = v.modifiedResponse.body;
+          this.body = v.modified ? v.modifiedResponse.body : v.response.body;
         }
       }),
       tap(() => this.isInitChange = true)
     );
+
     this.codeChanged$.pipe(
       debounceTime(400)
     ).subscribe(value => {

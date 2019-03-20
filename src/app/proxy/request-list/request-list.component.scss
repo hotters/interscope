@@ -29,44 +29,35 @@ $item-height: 30px;
     height: 100%;
   }
 
+  .url {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
   .state {
     flex-basis: calc(#{$item-height} / 2);
     flex-shrink: 0;
     height: calc(#{$item-height} / 2);
     padding: calc(#{$item-height} / 4);
+    cursor: default;
 
-    &:hover {
-      .breakpoint {
-        display: block;
-        opacity: 0.5;
+    .icon {
+      font-size: calc(#{$item-height} / 2);
+      line-height: calc(#{$item-height} / 2);
+      vertical-align: top;
 
-        &--show {
-          opacity: 1;
+      &.edit {
+        cursor: pointer;
+
+        &:hover {
+          color: black;
         }
       }
-    }
-  }
 
-  .breakpoint {
-    display: none;
-    flex-basis: calc(#{$item-height} / 2);
-    height: calc(#{$item-height} / 2);
-    box-sizing: border-box;
-    border-radius: 50%;
-    background-image: $breakpoint-bg;
-
-    &--show {
-      display: block;
-    }
-  }
-
-  .icon {
-    font-size: calc(#{$item-height} / 2);
-    line-height: calc(#{$item-height} / 2);
-    vertical-align: top;
-
-    &:hover {
-      color: black;
+      &.done {
+        color: green;
+      }
     }
   }
 
@@ -85,11 +76,6 @@ $item-height: 30px;
 
   .hostname {
     color: black;
-  }
-
-  .modified {
-    flex-grow: 1;
-    flex-basis: $item-height;
   }
 
   &:hover {

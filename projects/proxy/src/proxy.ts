@@ -25,10 +25,16 @@ export class HttpProxy {
     }).listen(8888, () => listenerHandler())
       .on('error', (error: Error) => console.log('[HTTP]', error));
 
-    this.proxy.on('error', (err, req, res) => {
+    this.proxy.on('error', (err, req: IncomingMessage, res: ServerResponse) => {
       errorHandler(err);
       res.writeHead(500, { 'Content-Type': 'text/plain' });
       res.end();
+      this.onResponse(req, {
+        statusCode: res.statusCode,
+        statusMessage: res.statusMessage,
+        headers: res.getHeaders(),
+        body: null
+      });
     });
 
     this.proxy.on('proxyReq', async (proxyReq: ClientRequest, req, res: ServerResponse, options) => {

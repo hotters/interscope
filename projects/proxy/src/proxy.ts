@@ -25,6 +25,12 @@ export class HttpProxy {
     }).listen(8888, () => listenerHandler())
       .on('error', (error: Error) => console.log('[HTTP]', error));
 
+    this.proxy.on('error', (err, req, res) => {
+      errorHandler(err);
+      res.writeHead(500, { 'Content-Type': 'text/plain' });
+      res.end();
+    });
+
     this.proxy.on('proxyReq', async (proxyReq: ClientRequest, req, res: ServerResponse, options) => {
       // modify req/res here
       this.deleteRequestCacheHeaders(proxyReq);

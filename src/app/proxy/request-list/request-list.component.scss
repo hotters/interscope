@@ -64,6 +64,10 @@ $item-height: 30px;
     font-size: calc(#{$item-height} / 2);
     line-height: calc(#{$item-height} / 2);
     vertical-align: top;
+
+    &:hover {
+      color: black;
+    }
   }
 
   .method {

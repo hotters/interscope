@@ -4,7 +4,7 @@ let mainWindow: BrowserWindow | null = null;
 
 
 function createWindow() {
-  mainWindow = new BrowserWindow({ width: 1280, height: 1024 });
+  mainWindow = new BrowserWindow({ width: 1280, height: 1024, webPreferences: { nodeIntegration: true } });
 
   const isServe = process.env.ELECTRON_SERVE === 'true';
   if (isServe) {

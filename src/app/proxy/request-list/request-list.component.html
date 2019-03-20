@@ -17,9 +17,7 @@
      class="request-item">
   <div class="state">
     <mat-spinner *ngIf="request.pending" [diameter]="15" [strokeWidth]="1"></mat-spinner>
-    <mat-icon (click)="reset(request.id)" *ngIf="request.modified" [inline]="true" class="icon">
-      edit
-    </mat-icon>
+    <mat-icon *ngIf="request.modified" (click)="reset($event, request.id)" [inline]="true" class="icon">edit</mat-icon>
   </div>
   <span [ngStyle]="{'background-color': getMethodColor(request.method)}" class="method">
       {{request.method}}

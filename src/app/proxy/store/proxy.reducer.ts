@@ -62,6 +62,8 @@ export function reducer(state = initialState, action: ProxyActions): ProxyState 
           [action.id]: {
             ...state.exchanges[action.id],
             response: action.payload,
+            modifiedResponse: action.payload,
+            modified: false,
             pending: false
           }
         }
@@ -86,6 +88,20 @@ export function reducer(state = initialState, action: ProxyActions): ProxyState 
       return {
         ...state,
         selected: action.id
+      };
+    }
+
+    case ProxyActionTypes.ResetModifiedRequest: {
+      return {
+        ...state,
+        exchanges: {
+          ...state.exchanges,
+          [action.id]: {
+            ...state.exchanges[action.id],
+            modifiedResponse: { ...state.exchanges[action.id].response },
+            modified: false
+          }
+        }
       };
     }
 

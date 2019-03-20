@@ -24,9 +24,20 @@
 
         <dt>Body</dt>
       </dl>
+
+      <div class="toolbox">
+        <mat-button-toggle-group appearance="standard" (change)="setLang($event.value)">
+          <mat-button-toggle value="json">JSON</mat-button-toggle>
+          <mat-button-toggle value="html">HTML</mat-button-toggle>
+          <mat-button-toggle value="javascript">JS</mat-button-toggle>
+          <mat-button-toggle value="css">CSS</mat-button-toggle>
+          <mat-button-toggle value="text">Raw</mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+
       <div class="editor">
-        <ngx-monaco-editor [code]="request.response.body"
-                           (codeChange)="onCodeChange($event, request.id)"
+        <ngx-monaco-editor [code]="body"
+                           (codeChange)="onCodeChange($event, request)"
                            [options]="editorOptions">
         </ngx-monaco-editor>
       </div>

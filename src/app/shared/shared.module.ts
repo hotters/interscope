@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import {
   MatButtonModule,
+  MatButtonToggleModule,
   MatFormFieldModule,
   MatIconModule,
   MatInputModule,
@@ -21,7 +22,8 @@ const Shared = [
   MatRippleModule,
   MatButtonModule,
   MatInputModule,
-  MatIconModule
+  MatIconModule,
+  MatButtonToggleModule
 ];
 
 @NgModule({

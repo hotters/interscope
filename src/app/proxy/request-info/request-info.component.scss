@@ -32,16 +32,16 @@
   }
 }
 
+.toolbox {
+  margin: 20px auto;
+}
+
 .editor {
   display: flex;
   align-items: stretch;
   justify-content: center;
   height: 50vh;
   flex-direction: column;
-
-  .controls {
-
-  }
 }
 
 .center {

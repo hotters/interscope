@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { ProxyService } from '../proxy.service';
-import { ClearRequests, SelectExchange, UpdateExchange } from '../store/proxy.actions';
+import { ClearRequests, ResetModifiedRequest, SelectExchange } from '../store/proxy.actions';
 import { ExchangeState } from '../store/proxy.reducer';
 import { AppState } from 'src/app/store/app.state';
 import { HttpMethod } from 'proxy';
@@ -69,8 +69,9 @@ export class RequestListComponent implements OnInit {
     return item.id;
   }
 
-  reset(id) {
-    this.store.dispatch(new UpdateExchange(id, { modifiedResponse: null, modified: false }));
+  reset(e, id) {
+    e.stopPropagation();
+    this.store.dispatch(new ResetModifiedRequest(id));
   }
 
   clear() {

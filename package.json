@@ -2,7 +2,7 @@
   "name": "dodger",
   "version": "2.0.0",
   "scripts": {
-    "serve": "ng serve electron --port=5200",
+    "serve": "node ./projects/electron/preserve.js && ng serve electron --port=5200",
     "build": "node ./projects/electron/prebuild.js && ng build electron --prod",
     "test": "ng test",
     "lint": "ng lint",

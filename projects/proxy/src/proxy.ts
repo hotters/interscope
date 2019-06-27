@@ -16,14 +16,15 @@ export class HttpProxy {
     listenerHandler = () => console.log('[Proxy] Started'),
     private errorHandler = (error) => console.log('[Proxy] Error', error)
   ) {
-    this.proxy = Proxy.createProxyServer({ ws: true, changeOrigin: true });
+    this.proxy = Proxy.createProxyServer({ ws: true, changeOrigin: false });
 
     Http.createServer((clientReq, clientRes) => {
       this.listener(clientReq, clientRes);
-    }).on('upgrade', (req, socket, head) => {
+    }).listen(8888, () => listenerHandler()).on('upgrade', (req, socket, head) => {
+      // req.url = req.url.replace('gaz', 'localhost');
+      // req.headers.host = req.headers.host.replace('gaz', 'localhost');
       this.proxy.ws(req, socket, head);
-    }).listen(8888, () => listenerHandler())
-      .on('error', (error: Error) => console.log('[HTTP]', error));
+    }).on('error', (error: Error) => console.log('[HTTP]', error));
 
     this.proxy.on('error', (err, req: IncomingMessage, res: ServerResponse) => {
       errorHandler(err);
@@ -39,7 +40,10 @@ export class HttpProxy {
 
     this.proxy.on('proxyReq', async (proxyReq: ClientRequest, req, res: ServerResponse, options) => {
       // modify req/res here
-      this.deleteRequestCacheHeaders(proxyReq);
+      if (req.headers.origin) {
+        req.headers.origin = (<string>req.headers.origin).replace('gaz', 'localhost');
+      }
+      // this.deleteRequestCacheHeaders(proxyReq);
       req.id = this.createId(req.method + req.url);
       req.body = await this.getBody(req);
       await this.transform(proxyReq, req, res);
@@ -51,12 +55,17 @@ export class HttpProxy {
   }
 
   private listener(clientReq: IncomingMessage & { body?, id?: string }, clientRes: ServerResponse) {
+    clientReq.url = clientReq.url.replace('gaz', 'localhost');
+    clientReq.headers.host = clientReq.headers.host.replace('gaz', 'localhost');
+    if (clientReq.headers.referer) {
+      clientReq.headers.referer = (<string>clientReq.headers.referer).replace('gaz', 'localhost');
+    }
     const url = Url.parse(clientReq.url);
-    this.proxy.web(clientReq, clientRes, { target: `${url.protocol}//${url.host}`, changeOrigin: true });
+    this.proxy.web(clientReq, clientRes, { target: `${url.protocol}//${url.host}` });
   }
 
   private onProxyResponse(proxyRes, clientReq: IncomingMessage, clientRes: ServerResponse) {
-    if (!proxyRes.headers['content-type'] || /application\/json|text\/html/.test(proxyRes.headers['content-type'])) {
+    if (!proxyRes.headers['content-type'] || /application\/(json|javascript)|text\/html/.test(proxyRes.headers['content-type'])) {
       this.getBody(proxyRes).then(body => {
         this.onResponse(clientReq, {
           statusCode: proxyRes.statusCode,

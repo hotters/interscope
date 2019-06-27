@@ -9,6 +9,9 @@
   <button mat-icon-button (click)="clear()">
     <mat-icon>clear</mat-icon>
   </button>
+  <button mat-icon-button (click)="addMapping()">
+    <mat-icon>add</mat-icon>
+  </button>
 </div>
 
 <div *ngFor="let request of requests | search:urlStr; trackBy: trackByFn"

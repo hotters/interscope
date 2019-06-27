@@ -82,4 +82,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
     this.requests$.unsubscribe();
   }
 
+  addMapping() {
+
+  }
 }

@@ -8,6 +8,7 @@ import { AddModifiedResponse } from '../store/proxy.actions';
 import { ExchangeState } from '../store/proxy.reducer';
 import { debounceTime, filter, tap } from 'rxjs/operators';
 import { ClientHttpResponse } from 'proxy';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 
 @Component({
@@ -17,6 +18,8 @@ import { ClientHttpResponse } from 'proxy';
   changeDetection: ChangeDetectionStrategy.Default
 })
 export class RequestInfoComponent implements OnInit, OnDestroy {
+
+  requestForm: FormGroup;
 
   request$: Observable<ExchangeState>;
   codeChanged$ = new Subject<[string, ClientHttpResponse]>();
@@ -34,11 +37,13 @@ export class RequestInfoComponent implements OnInit, OnDestroy {
 
   constructor(
     private proxyService: ProxyService,
-    private store: Store<AppState>
+    private store: Store<AppState>,
+    private fb: FormBuilder
   ) {
   }
 
   ngOnInit() {
+    this.createRequestForm();
     this.request$ = this.store.pipe(
       filter(store => {
         if ((this.selectedRequestId && this.selectedRequestId !== store.proxy.selected) || !this.selectedRequestId) {
@@ -81,6 +86,13 @@ export class RequestInfoComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.codeChanged$.unsubscribe();
+  }
+
+  private createRequestForm() {
+    this.requestForm = this.fb.group({
+      url: [],
+      method: [],
+    });
   }
 
   private chooseLang(req: ExchangeState) {

@@ -112,6 +112,14 @@ export function reducer(state = initialState, action: ProxyActions): ProxyState 
       };
     }
 
+    case ProxyActionTypes.InitRequests: {
+      return {
+        ...state,
+        exchanges: action.payload,
+        selected: null
+      };
+    }
+
     default: {
       return state;
     }

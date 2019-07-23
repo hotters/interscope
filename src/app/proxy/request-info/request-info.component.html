@@ -1,18 +1,24 @@
 <ng-container *ngIf="(request$ | async) as request">
   <div class="info">
     <h2>Request</h2>
-    <dl class="request">
-      <dt>General</dt>
-      <dd><span>URL</span>{{request.url}}</dd>
-      <dd><span>Method</span>{{request.method}}</dd>
+    <div class="request">
+      <div class="title">General</div>
+      <app-request-info-field [formControl]="requestForm.controls.url">URL</app-request-info-field>
+      <app-request-info-field [formControl]="requestForm.controls.method">Method</app-request-info-field>
+
+      <div class="field"><span>Method</span>{{request.method}}</div>
 
       <ng-container *ngTemplateOutlet="dd; context: {title: 'Headers', obj: request.headers}"></ng-container>
+
+
+      <app-request-info-headers *ngIf="getObjectLength(request.headers)"
+                                [headers]="request.headers"></app-request-info-headers>
 
       <ng-container *ngIf="request.body">
         <dt>Body</dt>
         <dd>{{request.body}}</dd>
       </ng-container>
-    </dl>
+    </div>
 
     <h2>Responses</h2>
     <ng-container *ngIf="!request.pending && request.response; else loading">

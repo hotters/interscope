@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ResetModifiedRequest } from '../store/proxy.actions';
+import { ResetModifiedRequest } from '../../store/proxy.actions';
 import { HttpMethod } from 'proxy/src/models';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../store/app.state';
+import { AppState } from '../../../store/app.state';
 
 @Component({
   selector: 'app-request-item',

@@ -1,0 +1,3 @@
+<div *ngFor="let control of headersForm.controls | keyvalue">
+  <app-request-info-field [formControl]="control.value">{{control.key}}</app-request-info-field>
+</div>

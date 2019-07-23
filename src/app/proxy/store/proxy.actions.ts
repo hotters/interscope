@@ -11,6 +11,7 @@ export enum ProxyActionTypes {
   SelectExchange = '[Proxy] SelectExchange',
   ClearRequests = '[Proxy] ClearRequests',
   ResetModifiedRequest = '[Proxy] ResetModifiedRequest',
+  InitRequests = '[Proxy] InitRequests'
 }
 
 
@@ -60,6 +61,13 @@ export class ClearRequests implements Action {
   readonly type = ProxyActionTypes.ClearRequests;
 }
 
+export class InitRequests implements Action {
+  readonly type = ProxyActionTypes.InitRequests;
+
+  constructor(public payload: any) {
+  }
+}
+
 
 export type ProxyActions
   = AddRequest
@@ -68,5 +76,6 @@ export type ProxyActions
   | SelectExchange
   | AddModifiedResponse
   | ResetModifiedRequest
-  | ClearRequests;
+  | ClearRequests
+  | InitRequests;
 

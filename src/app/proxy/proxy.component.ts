@@ -14,7 +14,8 @@ export class ProxyComponent {
     private proxyService: ProxyService
   ) {
     if (this.electron.isElectron) {
-      this.proxyService.init();
+      // this.proxyService.init();
+      this.proxyService.mock();
     }
   }
 

@@ -5,8 +5,9 @@ import { ClientHttpResponse, HttpMethod, HttpProxy } from 'proxy';
 import { first, tap } from 'rxjs/operators';
 import { AppService } from '../app.service';
 import { AppState } from '../store/app.state';
-import { AddRequest, AddResponse } from './store/proxy.actions';
+import { AddRequest, AddResponse, InitRequests } from './store/proxy.actions';
 import { ExchangeState } from './store/proxy.reducer';
+import { MOCK } from '../../assets/js/mock';
 
 
 @Injectable({
@@ -15,6 +16,7 @@ import { ExchangeState } from './store/proxy.reducer';
 export class ProxyService {
 
   proxy: HttpProxy;
+  private isMock = false;
   private modifiedResponses: { [id: string]: { headers, body } } = {};
 
   constructor(
@@ -59,6 +61,13 @@ export class ProxyService {
 
   private onResponse(req, res: ClientHttpResponse) {
     this.store.dispatch(new AddResponse(req.id, res));
+  }
+
+  mock() {
+    if (!this.isMock) {
+      this.isMock = true;
+      this.store.dispatch(new InitRequests(MOCK));
+    }
   }
 
 }

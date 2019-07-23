@@ -3,7 +3,7 @@ import { select, Store } from '@ngrx/store';
 import { ProxyService } from '../proxy.service';
 import { ClearRequests, SelectExchange } from '../store/proxy.actions';
 import { AppState } from 'src/app/store/app.state';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'request-list',
@@ -25,7 +25,9 @@ export class RequestListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.requests$ = this.store.pipe(
       select(store => store.proxy.exchanges),
-      map(i => Object.values(i).map(({ id, pending, modified, method, url }) => ({ id, pending, modified, method, url })))
+      tap(data => localStorage.mock = JSON.stringify(data)),
+      map(i => Object.values(i).map(({ id, pending, modified, method, url }) => ({ id, pending, modified, method, url }))),
+
     );
   }
 

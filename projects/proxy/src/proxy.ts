@@ -1,6 +1,8 @@
 import { ClientRequest, IncomingMessage, ServerResponse } from 'http';
 import { ClientHttpResponse } from './models';
 
+declare var window: any;
+
 const Http = window.require('http');
 const Url = window.require('url');
 const Crypto = window.require('crypto');

@@ -1,4 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
+@import 'styles/variables';
+@import 'styles/fonts';
 
 html, body {
   height: 100%;
@@ -10,11 +12,3 @@ body {
   margin: 0;
   font-family: "Segoe UI", sans-serif;
 }
-
-$GET: '#e7f0f7';
-$DELETE: '#f5e8e8';
-$POST: '#e7f6ec';
-$HEAD: '##fcffcd';
-$OPTIONS: '#e7f0f7';
-$PUT: '#f9f2e9';
-$PATCH: '#fce9e3';

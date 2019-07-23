@@ -11,10 +11,12 @@ import {
 } from '@angular/material';
 import { MonacoEditorModule } from '@materia-ui/ngx-monaco-editor';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SearchPipe } from './search.pipe';
+import { SearchPipe } from './search-pipe/search.pipe';
+import { SpinnerComponent } from './spinner/spinner.component';
 
 const Declarations = [
-  SearchPipe
+  SearchPipe,
+  SpinnerComponent
 ];
 
 const Shared = [

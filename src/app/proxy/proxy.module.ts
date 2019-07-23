@@ -8,13 +8,15 @@ import { RequestInfoComponent } from './request-info/request-info.component';
 import { RequestListComponent } from './request-list/request-list.component';
 import { ProxyEffects } from './store/proxy.effects';
 import { reducer } from './store/proxy.reducer';
+import { RequestItemComponent } from './request-item/request-item.component';
 
 
 @NgModule({
   declarations: [
     ProxyComponent,
     RequestListComponent,
-    RequestInfoComponent
+    RequestInfoComponent,
+    RequestItemComponent
   ],
   imports: [
     CommonModule,

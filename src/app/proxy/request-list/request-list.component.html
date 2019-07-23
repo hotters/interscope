@@ -1,36 +1,22 @@
 <div class="toolbox">
   <mat-form-field appearance="outline">
     <mat-label>Search URL</mat-label>
-    <input matInput type="text" placeholder="example.com" [(ngModel)]="urlStr">
-    <button *ngIf="urlStr" mat-icon-button matSuffix (click)="urlStr = ''">
+    <input #searchString matInput placeholder="example.com" type="text">
+    <button (click)="searchString.value = ''" *ngIf="searchString.value" mat-icon-button matSuffix>
       <mat-icon>clear</mat-icon>
     </button>
   </mat-form-field>
-  <button mat-icon-button (click)="clear()">
+  <button (click)="clear()" mat-icon-button>
     <mat-icon>clear</mat-icon>
   </button>
-  <button mat-icon-button (click)="addMapping()">
+  <button (click)="addMapping()" mat-icon-button>
     <mat-icon>add</mat-icon>
   </button>
 </div>
 
-<div *ngFor="let request of requests | search:urlStr; trackBy: trackByFn"
-     (click)="onSelect(request.id)"
-     [class.selected]="request.id === selectedId"
-     class="request-item">
-  <div class="state">
-    <mat-spinner *ngIf="request.pending" [diameter]="15" [strokeWidth]="1"></mat-spinner>
-    <mat-icon *ngIf="request.modified"
-              (click)="reset($event, request.id)"
-              [inline]="true"
-              class="icon edit">edit
-    </mat-icon>
-    <mat-icon *ngIf="!request.pending && !request.modified" [inline]="true" class="icon done">done</mat-icon>
-  </div>
-  <span [ngStyle]="{'background-color': getMethodColor(request.method)}" class="method">
-      {{request.method}}
-    </span><span class="url">
-      {{request.url}}
-    </span>
-</div>
-
+<app-request-item
+  (onSelect)="onSelect($event)"
+  *ngFor="let request of (requests$ | async) | search:searchString.value; trackBy: trackByFn"
+  [request]="request"
+  [selected]="request.id === selectedId"
+></app-request-item>

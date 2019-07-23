@@ -1,0 +1,16 @@
+<div (click)="onSelect.emit(request.id)" [class.selected]="selected" class="request-item">
+  <div class="state">
+    <app-spinner *ngIf="request.pending" [diameter]="15"></app-spinner>
+    <mat-icon (click)="reset($event, request.id)"
+              *ngIf="request.modified"
+              [inline]="true"
+              class="icon edit">edit
+    </mat-icon>
+    <mat-icon *ngIf="!request.pending && !request.modified" [inline]="true" class="icon done">done</mat-icon>
+  </div>
+  <span [ngStyle]="{'background-color': getMethodColor(request.method)}" class="method">
+    {{request.method}}
+  </span><span class="url">
+    {{request.url}}
+  </span>
+</div>

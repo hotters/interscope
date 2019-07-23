@@ -1,0 +1,87 @@
+$selected-bg: rgba(0, 0, 0, .1);
+$hover-bg: rgba(0, 0, 0, 0.05);
+$breakpoint-bg: linear-gradient(to right, red, #f06d06);
+$request-item-height: 30px;
+
+:host {
+  display: block;
+}
+
+.request-item {
+  display: flex;
+  width: 100%;
+  font-size: 1rem;
+  cursor: pointer;
+  height: $request-item-height;
+  color: gray;
+  overflow: hidden;
+
+  & > span,
+  & > div {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: $request-item-height;
+    height: 100%;
+  }
+
+  .url {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .state {
+    flex-basis: calc(#{$request-item-height} / 2);
+    flex-shrink: 0;
+    height: calc(#{$request-item-height} / 2);
+    padding: calc(#{$request-item-height} / 4);
+    cursor: default;
+
+    .icon {
+      font-size: calc(#{$request-item-height} / 2);
+      line-height: calc(#{$request-item-height} / 2);
+      vertical-align: top;
+
+      &.edit {
+        cursor: pointer;
+
+        &:hover {
+          color: black;
+        }
+      }
+
+      &.done {
+        color: green;
+      }
+    }
+  }
+
+  .method {
+    flex-basis: calc(#{$request-item-height} * 4 / 3);
+    flex-shrink: 0;
+    font-size: 0.7rem;
+    text-align: center;
+    overflow: hidden;
+    padding: 0 5px;
+  }
+
+  .protocol {
+    padding-left: 5px;
+  }
+
+  .hostname {
+    color: black;
+  }
+
+  &:hover {
+    background: $hover-bg;
+  }
+}
+
+.selected {
+  background: $selected-bg;
+
+  &:hover {
+    background: $selected-bg;
+  }
+}

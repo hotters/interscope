@@ -11,24 +11,31 @@ const Proxy = window.require('http-proxy');
 export class HttpProxy {
 
   private proxy;
+  private server;
 
   constructor(
-    private onRequest: (req: IncomingMessage & { body?: any, id?: string }) =>
-      Promise<{ statusCode, headers, body }>,
+    private onRequest: (req: IncomingMessage & { body?: any, id?: string }) => Promise<{ statusCode, headers, body }>,
     private onResponse: (req: IncomingMessage, res: ProxyHttpResponse) => void,
     listenerHandler = () => console.log('[Proxy] Started'),
-    private errorHandler = (error) => console.log('[Proxy] Error', error)
+    errorHandler = (error) => console.log('[Proxy] Error', error)
   ) {
-    this.proxy = Proxy.createProxyServer({ ws: true, changeOrigin: false });
+    this.createProxy(errorHandler);
+    this.createServer(listenerHandler);
+  }
 
-    Http.createServer((clientReq, clientRes) => {
-      this.listener(clientReq, clientRes);
-    }).listen(8888, () => listenerHandler()).on('upgrade', (req, socket, head) => {
+  private createServer(listenerHandler) {
+    this.server = Http.createServer((clientReq, clientRes) => this.listener(clientReq, clientRes));
+    this.server.listen(8888, () => listenerHandler());
+    this.server.on('error', (error: Error) => console.log('[HTTP]', error));
+    this.server.on('upgrade', (req, socket, head) => {
       // req.url = req.url.replace('gaz', 'localhost');
       // req.headers.host = req.headers.host.replace('gaz', 'localhost');
       this.proxy.ws(req, socket, head);
-    }).on('error', (error: Error) => console.log('[HTTP]', error));
+    });
+  }
 
+  private createProxy(errorHandler) {
+    this.proxy = Proxy.createProxyServer({ ws: true, changeOrigin: false });
     this.proxy.on('error', (err, req: IncomingMessage, res: ServerResponse) => {
       errorHandler(err);
       res.end();

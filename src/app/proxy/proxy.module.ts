@@ -11,6 +11,7 @@ import { RequestItemComponent } from './request-list/request-item/request-item.c
 import { RequestListComponent } from './request-list/request-list.component';
 import { RequestInfoFieldComponent } from './request-info/request-info-field/request-info-field.component';
 import { RequestInfoHeadersComponent } from './request-info/request-info-headers/request-info-headers.component';
+import { RequestMapComponent } from './request-map/request-map.component';
 
 
 @NgModule({
@@ -21,12 +22,16 @@ import { RequestInfoHeadersComponent } from './request-info/request-info-headers
     RequestItemComponent,
     RequestListComponent,
     RequestInfoHeadersComponent,
+    RequestMapComponent,
   ],
   imports: [
     CommonModule,
     SharedModule,
     EffectsModule.forFeature([ProxyEffects]),
     StoreModule.forFeature('proxy', reducer)
+  ],
+  entryComponents: [
+    RequestMapComponent
   ]
 })
 export class ProxyModule {

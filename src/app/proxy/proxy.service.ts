@@ -17,7 +17,6 @@ export class ProxyService {
 
   proxy: HttpProxy;
   private isMock = false;
-  private modifiedResponses: { [id: string]: { headers, body } } = {};
 
   constructor(
     private appService: AppService,
@@ -34,16 +33,20 @@ export class ProxyService {
     );
   }
 
-  addModifiedResponse(id, res: { headers, body }) {
-    this.modifiedResponses[id] = res;
+  mock() {
+    if (!this.isMock) {
+      this.isMock = true;
+      this.store.dispatch(new InitRequests(MOCK));
+    }
   }
 
-  private transform(proxyReq: ClientRequest, req: IncomingMessage & { body?: any, id: string }, res: ServerResponse) {
+  private transform(proxyReq: ClientRequest, req: IncomingMessage & { body?: any, id: string, mapped?: boolean }, res: ServerResponse) {
     this.store.dispatch(new AddRequest(req.id, {
       url: req.url,
       method: <keyof typeof HttpMethod>req.method,
       headers: req.headers,
-      body: req.body
+      body: req.body,
+      mapped: req.mapped
     }));
     return this.store.pipe(
       first(),
@@ -61,13 +64,6 @@ export class ProxyService {
 
   private onResponse(req, res: ClientHttpResponse) {
     this.store.dispatch(new AddResponse(req.id, res));
-  }
-
-  mock() {
-    if (!this.isMock) {
-      this.isMock = true;
-      this.store.dispatch(new InitRequests(MOCK));
-    }
   }
 
 }

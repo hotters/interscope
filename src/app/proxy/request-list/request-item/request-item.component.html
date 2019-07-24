@@ -12,5 +12,5 @@
     {{request.method}}
   </span><span class="url">
     {{request.url}}
-  </span>
+</span><span *ngIf="request.mapped" class="mapped">M</span>
 </div>

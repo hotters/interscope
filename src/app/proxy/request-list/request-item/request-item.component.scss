@@ -76,6 +76,15 @@ $request-item-height: 30px;
   &:hover {
     background: $hover-bg;
   }
+
+  .mapped {
+    flex-grow: 1;
+    text-align: right;
+    color: #e35a5a;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0 5px;
+  }
 }
 
 .selected {

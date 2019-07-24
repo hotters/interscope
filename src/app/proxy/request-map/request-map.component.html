@@ -1,0 +1,13 @@
+<div class="list">
+  <div *ngFor="let item of hosts | keyvalue" class="row">
+    <input [value]="item.key" type="text" disabled>
+    <input [value]="item.value" type="text">
+    <button (click)="removeItem(item.key)">Remove</button>
+    <button (click)="setItem(item.key, item.value)">Save</button>
+  </div>
+  <div class="row">
+    <input type="text" #key>
+    <input type="text" #value>
+    <button (click)="setItem(key.value, value.value); key.value = ''; value.value = ''">Add</button>
+  </div>
+</div>

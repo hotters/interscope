@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import {
   MatButtonModule,
   MatButtonToggleModule,
+  MatDialogModule,
   MatFormFieldModule,
   MatIconModule,
   MatInputModule,
@@ -30,7 +31,8 @@ const Shared = [
   MatButtonModule,
   MatInputModule,
   MatIconModule,
-  MatButtonToggleModule
+  MatButtonToggleModule,
+  MatDialogModule
 ];
 
 @NgModule({

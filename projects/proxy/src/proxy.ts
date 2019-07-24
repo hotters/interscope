@@ -30,8 +30,8 @@ export class HttpProxy {
 
     this.proxy.on('error', (err, req: IncomingMessage, res: ServerResponse) => {
       errorHandler(err);
-      res.writeHead(500, { 'Content-Type': 'text/plain' });
       res.end();
+      // TODO передавать текст ошибки в ui
       this.onResponse(req, {
         statusCode: res.statusCode,
         statusMessage: res.statusMessage,
@@ -42,9 +42,6 @@ export class HttpProxy {
 
     this.proxy.on('proxyReq', async (proxyReq: ClientRequest, req, res: ServerResponse, options) => {
       // modify req/res here
-      if (req.headers.origin) {
-        req.headers.origin = (<string>req.headers.origin).replace('gaz', 'localhost');
-      }
       // this.deleteRequestCacheHeaders(proxyReq);
       req.id = this.createId(req.method + req.url);
       req.body = await this.getBody(req);
@@ -56,14 +53,18 @@ export class HttpProxy {
     });
   }
 
-  private listener(clientReq: IncomingMessage & { body?, id?: string }, clientRes: ServerResponse) {
-    clientReq.url = clientReq.url.replace('gaz', 'localhost');
-    clientReq.headers.host = clientReq.headers.host.replace('gaz', 'localhost');
-    if (clientReq.headers.referer) {
-      clientReq.headers.referer = (<string>clientReq.headers.referer).replace('gaz', 'localhost');
+  private listener(clientReq: IncomingMessage & { body?, id?: string, mapped?: boolean }, clientRes: ServerResponse) {
+    let { protocol, host } = Url.parse(clientReq.url);
+    clientReq.mapped = false;
+    if (window.localStorage[host]) {
+      host = window.localStorage[host];
+      clientReq.mapped = true;
     }
-    const url = Url.parse(clientReq.url);
-    this.proxy.web(clientReq, clientRes, { target: `${url.protocol}//${url.host}` });
+    this.proxy.web(clientReq, clientRes, {
+      target: `${protocol}//${host}`,
+      // changeOrigin: true,
+      // forward: `${url.protocol}//${url.host.replace('localhost', 'gaz')}`
+    });
   }
 
   private onProxyResponse(proxyRes, clientReq: IncomingMessage, clientRes: ServerResponse) {
@@ -111,6 +112,17 @@ export class HttpProxy {
     req.setHeader('expires', '0');
     req.setHeader('cache-control', 'no-cache');
     req.setHeader('pragma', 'no-cache');
+  }
+
+  private mapRequest(host: string) {
+    // localStorage.map.forEach(item => {
+    //   if (item && item.from && item.to) {
+    //
+    //   }
+    // });
+    // if (localStorage[host]) {
+    //   return host.replace('host', localStorage[host]);
+    // }
   }
 
 }

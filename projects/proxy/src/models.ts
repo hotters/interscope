@@ -20,14 +20,18 @@ export interface ModifiedResponses {
 export interface ClientHttpResponse {
   statusCode: number;
   statusMessage: string;
-  headers: { [key: string]: any };
+  headers: Headers;
   body: any;
 }
 
 export interface ClientHttpRequest {
   method?: keyof typeof HttpMethod;
   url?: string;
-  headers: { [key: string]: any };
+  headers: Headers;
   body?: any;
+  mapped?: boolean;
 }
 
+export interface Headers {
+  [key: string]: any;
+}

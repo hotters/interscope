@@ -17,19 +17,19 @@ export interface ModifiedResponses {
   [id: string]: string;
 }
 
-export interface ClientHttpResponse {
+export interface ProxyHttpResponse {
   statusCode: number;
   statusMessage: string;
   headers: Headers;
   body: any;
 }
 
-export interface ClientHttpRequest {
+export interface ProxyHttpRequest {
+  headers: Headers;
+  mapped: boolean;
   method?: keyof typeof HttpMethod;
   url?: string;
-  headers: Headers;
   body?: any;
-  mapped?: boolean;
 }
 
 export interface Headers {

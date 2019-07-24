@@ -14,7 +14,7 @@ export class RequestItemComponent implements OnInit {
 
   @Input() request;
   @Input() selected = false;
-  @Output() onSelect = new EventEmitter();
+  @Output() onSelect = new EventEmitter<string>();
 
   constructor(
     private store: Store<AppState>,

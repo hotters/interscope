@@ -7,7 +7,7 @@ import { ProxyService } from '../proxy.service';
 import { AddModifiedResponse } from '../store/proxy.actions';
 import { ExchangeState } from '../store/proxy.reducer';
 import { debounceTime, filter, tap } from 'rxjs/operators';
-import { ClientHttpResponse } from 'proxy';
+import { ProxyHttpResponse } from 'proxy';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 
@@ -22,7 +22,7 @@ export class RequestInfoComponent implements OnInit, OnDestroy {
   requestForm: FormGroup;
 
   request$: Observable<ExchangeState>;
-  codeChanged$ = new Subject<[string, ClientHttpResponse]>();
+  codeChanged$ = new Subject<[string, ProxyHttpResponse]>();
   isInitChange = true;
   body = '';
   selectedRequestId = '';

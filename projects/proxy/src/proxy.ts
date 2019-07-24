@@ -1,5 +1,5 @@
 import { ClientRequest, IncomingMessage, ServerResponse } from 'http';
-import { ClientHttpResponse } from './models';
+import { ProxyHttpResponse } from './models';
 
 declare var window: any;
 
@@ -13,8 +13,9 @@ export class HttpProxy {
   private proxy;
 
   constructor(
-    private transform: (proxyReq: ClientRequest, req: IncomingMessage & { body?: any, id?: string }, res: ServerResponse) => Promise<null>,
-    private onResponse: (req: IncomingMessage, res: ClientHttpResponse) => void,
+    private onRequest: (req: IncomingMessage & { body?: any, id?: string }) =>
+      Promise<{ statusCode, headers, body }>,
+    private onResponse: (req: IncomingMessage, res: ProxyHttpResponse) => void,
     listenerHandler = () => console.log('[Proxy] Started'),
     private errorHandler = (error) => console.log('[Proxy] Error', error)
   ) {
@@ -42,10 +43,15 @@ export class HttpProxy {
 
     this.proxy.on('proxyReq', async (proxyReq: ClientRequest, req, res: ServerResponse, options) => {
       // modify req/res here
-      // this.deleteRequestCacheHeaders(proxyReq);
       req.id = this.createId(req.method + req.url);
       req.body = await this.getBody(req);
-      await this.transform(proxyReq, req, res);
+
+      const transformedRequest = await this.onRequest(req);
+      if (transformedRequest) {
+        proxyReq.abort();
+        res.writeHead(transformedRequest.statusCode, transformedRequest.headers);
+        res.end(transformedRequest.body);
+      }
     });
 
     this.proxy.on('proxyRes', (proxyRes, req, res) => {
@@ -60,11 +66,7 @@ export class HttpProxy {
       host = window.localStorage[host];
       clientReq.mapped = true;
     }
-    this.proxy.web(clientReq, clientRes, {
-      target: `${protocol}//${host}`,
-      // changeOrigin: true,
-      // forward: `${url.protocol}//${url.host.replace('localhost', 'gaz')}`
-    });
+    this.proxy.web(clientReq, clientRes, { target: `${protocol}//${host}` });
   }
 
   private onProxyResponse(proxyRes, clientReq: IncomingMessage, clientRes: ServerResponse) {
@@ -102,27 +104,6 @@ export class HttpProxy {
 
   private createId(str: string) {
     return Crypto.createHash('md5').update(str).digest('hex');
-  }
-
-  private deleteRequestCacheHeaders(req: ClientRequest) {
-    req.removeHeader('etag');
-    req.removeHeader('if-none-match');
-    req.removeHeader('if-modified-since');
-    req.removeHeader('last-modified');
-    req.setHeader('expires', '0');
-    req.setHeader('cache-control', 'no-cache');
-    req.setHeader('pragma', 'no-cache');
-  }
-
-  private mapRequest(host: string) {
-    // localStorage.map.forEach(item => {
-    //   if (item && item.from && item.to) {
-    //
-    //   }
-    // });
-    // if (localStorage[host]) {
-    //   return host.replace('host', localStorage[host]);
-    // }
   }
 
 }

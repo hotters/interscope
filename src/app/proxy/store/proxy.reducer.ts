@@ -1,5 +1,5 @@
 import { ProxyActions, ProxyActionTypes } from './proxy.actions';
-import { ClientHttpRequest, ClientHttpResponse } from 'proxy';
+import { ProxyHttpRequest, ProxyHttpResponse } from 'proxy';
 
 
 export interface ProxyState {
@@ -7,12 +7,12 @@ export interface ProxyState {
   selected: string;
 }
 
-export interface ExchangeState extends ClientHttpRequest {
+export interface ExchangeState extends ProxyHttpRequest {
 
   id: string;
 
-  response: ClientHttpResponse;
-  modifiedResponse: ClientHttpResponse;
+  response: ProxyHttpResponse;
+  modifiedResponse: ProxyHttpResponse;
 
   pending: boolean;
   modified: boolean;

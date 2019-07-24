@@ -20,6 +20,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
 
   constructor(
     private proxyService: ProxyService,
+    // private requestService: RequestService,
     private store: Store<AppState>,
     public dialog: MatDialog
   ) {
@@ -56,7 +57,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
 
   private openDialog() {
     this.dialog.open(RequestMapComponent, {
-      width: '80%',
+      width: '800px',
       data: null
     });
   }

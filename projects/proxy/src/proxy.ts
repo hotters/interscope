@@ -4,6 +4,7 @@ import { ProxyHttpResponse } from './models';
 declare var window: any;
 
 const Http = window.require('http');
+const Net = window.require('net');
 const Url = window.require('url');
 const Crypto = window.require('crypto');
 const Proxy = window.require('http-proxy');
@@ -25,17 +26,34 @@ export class HttpProxy {
 
   private createServer(listenerHandler) {
     this.server = Http.createServer((clientReq, clientRes) => this.listener(clientReq, clientRes));
-    this.server.listen(8888, () => listenerHandler());
-    this.server.on('error', (error: Error) => console.log('[HTTP]', error));
-    this.server.on('upgrade', (req, socket, head) => {
-      // req.url = req.url.replace('gaz', 'localhost');
-      // req.headers.host = req.headers.host.replace('gaz', 'localhost');
+
+    this.server.on('connect', (req: IncomingMessage, cltSocket, head) => {
+      const srvUrl = Url.parse(`http://${window.localStorage[req.url] || req.url}`);
+      const srvSocket = Net.connect(srvUrl.port, srvUrl.hostname, () => {
+        cltSocket.write('HTTP/1.1 200 Connection Established\r\n' +
+          'Proxy-agent: Proxy\r\n' +
+          'Connection: close\r\n' +
+          '\r\n');
+        srvSocket.write(head);
+        srvSocket.pipe(cltSocket);
+        cltSocket.pipe(srvSocket);
+      });
+    });
+
+    this.server.on('upgrade', (req, socket, head, error) => {
+      socket.on('error', err => {
+        console.error(err); // ECONNRESET will be caught here
+      });
       this.proxy.ws(req, socket, head);
     });
+
+    this.server.on('error', (error: Error) => console.log('[HTTP]', error));
+
+    this.server.listen(8888, () => listenerHandler());
   }
 
   private createProxy(errorHandler) {
-    this.proxy = Proxy.createProxyServer({ ws: true, changeOrigin: false });
+    this.proxy = Proxy.createProxyServer();
     this.proxy.on('error', (err, req: IncomingMessage, res: ServerResponse) => {
       errorHandler(err);
       res.end();

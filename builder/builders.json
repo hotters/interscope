@@ -1,0 +1,14 @@
+{
+  "builders": {
+    "serve": {
+      "implementation": "./serve",
+      "schema": "./schema.json",
+      "description": "Runs and serve electron platform"
+    },
+    "build": {
+      "implementation": "./build",
+      "schema": "./schema.json",
+      "description": "Runs any command line in the operating system."
+    }
+  }
+}

@@ -4,9 +4,20 @@
   "description": "Dev Server target options for Build Facade.",
   "type": "object",
   "properties": {
-    "webpackConfig": {
+    "baseHref": {
       "type": "string",
-      "description": "Path to webpack config"
+      "description": "Base href.",
+      "default": ""
+    },
+    "baseUrl": {
+      "type": "string",
+      "description": "Base URL.",
+      "default": ""
+    },
+    "deployUrl": {
+      "type": "string",
+      "description": "Base deploy URL.",
+      "default": ""
     },
     "browserTarget": {
       "type": "string",

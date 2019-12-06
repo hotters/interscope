@@ -13,8 +13,9 @@ export class ProxyComponent {
     private electron: ElectronService,
     private proxyService: ProxyService
   ) {
+    console.log('PROXY');
     if (this.electron.isElectron) {
-      this.proxyService.init();
+      // this.proxyService.init();
       // this.proxyService.mock();
     }
   }

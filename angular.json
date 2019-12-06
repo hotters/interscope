@@ -204,6 +204,22 @@
           }
         }
       }
+    },
+    "custom": {
+      "root": "projects/electron",
+      "sourceRoot": "src",
+      "projectType": "application",
+      "architect": {
+        "serve": {
+          "builder": "./builder:serve",
+          "options": {
+            "browserTarget": "dodger2:build",
+            "deployUrl": "",
+            "baseHref": "",
+            "baseUrl": ""
+          }
+        }
+      }
     }
   },
   "defaultProject": "dodger2"

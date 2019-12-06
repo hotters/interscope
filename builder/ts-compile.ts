@@ -1,7 +1,7 @@
 import * as ts from 'typescript';
 import { Observable } from 'rxjs';
 
-export function watch(path, configName = 'tsconfig.json'): Observable<null> {
+export function watch(path, configName = 'tsconfig.electron.json'): Observable<null> {
   return new Observable(subscriber => {
     const configPath = ts.findConfigFile(
       path,

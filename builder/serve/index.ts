@@ -2,7 +2,7 @@ import { BuilderContext, createBuilder } from '@angular-devkit/architect';
 import * as childProcess from 'child_process';
 import * as ts from '../ts-compile';
 import * as kill from 'tree-kill';
-import { merge, Observable } from 'rxjs';
+import { merge, Notification, Observable } from 'rxjs';
 import { dematerialize, first, map, materialize, mergeMap, share, switchMap, tap } from 'rxjs/operators';
 import { ElectronSchema } from '../schema';
 import { DevServerBuilderOutput, executeDevServerBuilder } from '@angular-devkit/build-angular';
@@ -15,9 +15,12 @@ function electronBuilder(electronArgs: ElectronSchema, context: BuilderContext):
   );
   const firstBuild = ngBuild.pipe(
     first(),
-    map(({value: {baseUrl}}) => {
+    map(({value, error}: Notification<DevServerBuilderOutput>) => {
+      if (!value) {
+        throw error;
+      }
       electraLog('Run Electron with config:', '\n', electronArgs);
-      return baseUrl;
+      return value.baseUrl;
     }),
     tap(baseUrl => electraLog(`Electron is watching ${baseUrl}. Start building...`)),
     switchMap(baseUrl => watchElectron(electronArgs, context).pipe(
@@ -35,27 +38,29 @@ function electronBuilder(electronArgs: ElectronSchema, context: BuilderContext):
   );
 }
 
-function serveAngular(electronArgs, context): Observable<DevServerBuilderOutput> {
+function serveAngular(electronArgs, context): any {
   return executeDevServerBuilder(electronArgs, context);
 }
 
 function watchElectron(electronArgs, {workspaceRoot}): Observable<any> {
-  return ts.watch(workspaceRoot + '/projects/electron');
+  return ts.watch(workspaceRoot + '/projects/electron', 'tsconfig.electron.json');
 }
 
 function runElectron(electronArgs, baseUrl: string, context: BuilderContext): () => Observable<any> {
   const options: childProcess.SpawnOptions = {
     stdio: ['pipe', 'inherit', 'inherit'],
     env: {
-      APP_URL: baseUrl
+      ELECTRON_URL: baseUrl
     }
   };
+  const el = require('electron');
+
   const electron = 'node_modules/electron/dist/Electron.app/Contents/MacOS/Electron'; // TODO change to dynamic
   const projectDir = context.workspaceRoot + '/projects/electron'; // TODO change to dynamic
   let pid = null;
   return () => new Observable(subscriber => {
     const spawn = () => {
-      const electronProcess = childProcess.spawn(electron, [projectDir], options);
+      const electronProcess = childProcess.spawn(el, [projectDir], options);
       electronProcess.on('close', code => {
         if (code !== null) {
           subscriber.next(code);

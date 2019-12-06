@@ -32,7 +32,7 @@
       </dl>
 
       <div class="toolbox">
-        <mat-button-toggle-group appearance="standard" (change)="setLang($event.value)">
+        <mat-button-toggle-group (change)="setLang($event.value)" appearance="standard">
           <mat-button-toggle value="json">JSON</mat-button-toggle>
           <mat-button-toggle value="html">HTML</mat-button-toggle>
           <mat-button-toggle value="javascript">JS</mat-button-toggle>
@@ -42,9 +42,10 @@
       </div>
 
       <div class="editor">
-        <ngx-monaco-editor [code]="body"
-                           (codeChange)="onCodeChange($event, request)"
-                           [options]="editorOptions">
+        <ngx-monaco-editor
+          (ngModelChange)="onCodeChange($event, request)"
+          [ngModel]="body"
+          [options]="editorOptions">
         </ngx-monaco-editor>
       </div>
     </ng-container>
@@ -53,7 +54,7 @@
 </ng-container>
 
 
-<ng-template #dd let-title="title" let-obj="obj">
+<ng-template #dd let-obj="obj" let-title="title">
   <ng-container *ngIf="getObjectLength(obj)">
     <dt>{{title}}</dt>
     <dd *ngFor="let item of obj | keyvalue">
@@ -63,7 +64,7 @@
 </ng-template>
 
 <ng-template #loading>
-  <mat-spinner class="center" [diameter]="50" [strokeWidth]="2"></mat-spinner>
+  <mat-spinner [diameter]="50" [strokeWidth]="2" class="center"></mat-spinner>
 </ng-template>
 
 <ng-template #empty>

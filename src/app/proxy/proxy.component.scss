@@ -1,8 +1,9 @@
 :host {
   height: 100%;
   display: grid;
-  grid-template: "list info info" minmax(50px, 10%) "list info info" minmax(300px, auto)
-   / 40% 30% 30%;
+  grid-template:
+    "list info info" minmax(50px, 10%)
+    "list info info" minmax(300px, auto) / 40% 30% 30%;
 }
 
 .toolbox {

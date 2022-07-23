@@ -9,11 +9,7 @@
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
-    "lib": [
-      "es2018"
-    ]
+    "lib": ["es2018"]
   },
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }

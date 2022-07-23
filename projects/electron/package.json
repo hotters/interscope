@@ -2,7 +2,7 @@
   "name": "electron",
   "version": "2.0.0",
   "main": "main.js",
-  "dependencies": {
+  "peerDependencies": {
     "http-proxy": "^1.17.0"
   }
 }

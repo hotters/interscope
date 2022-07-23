@@ -2,28 +2,23 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MonacoEditorModule } from '@materia-ui/ngx-monaco-editor';
+import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ProxyModule } from './proxy/proxy.module';
-import { AppStoreModule } from './store/app-store.module';
-import { RouterModule } from '@angular/router';
 import { RequestComponent } from './request/request.component';
-
+import { AppStoreModule } from './store/app-store.module';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    RequestComponent
-  ],
+  declarations: [AppComponent, RequestComponent],
   imports: [
     BrowserModule,
-    RouterModule.forRoot([{path: '', component: RequestComponent}]),
-    // MonacoEditorModule,
+    AppRoutingModule,
+    MonacoEditorModule,
     BrowserAnimationsModule,
     AppStoreModule,
-    // ProxyModule
+    ProxyModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule {
-}
+export class AppModule {}

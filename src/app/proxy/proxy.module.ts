@@ -1,18 +1,17 @@
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
-import { EffectsModule } from '@ngrx/effects';
-import { StoreModule } from '@ngrx/store';
-import { SharedModule } from '../shared/shared.module';
-import { ProxyComponent } from './proxy.component';
-import { RequestInfoComponent } from './request-info/request-info.component';
-import { ProxyEffects } from './store/proxy.effects';
-import { reducer } from './store/proxy.reducer';
-import { RequestItemComponent } from './request-list/request-item/request-item.component';
-import { RequestListComponent } from './request-list/request-list.component';
-import { RequestInfoFieldComponent } from './request-info/request-info-field/request-info-field.component';
-import { RequestInfoHeadersComponent } from './request-info/request-info-headers/request-info-headers.component';
-import { RequestMapComponent } from './request-map/request-map.component';
-
+import { CommonModule } from "@angular/common";
+import { NgModule } from "@angular/core";
+import { EffectsModule } from "@ngrx/effects";
+import { StoreModule } from "@ngrx/store";
+import { SharedModule } from "../shared/shared.module";
+import { ProxyComponent } from "./proxy.component";
+import { RequestInfoFieldComponent } from "./request-info/request-info-field/request-info-field.component";
+import { RequestInfoHeadersComponent } from "./request-info/request-info-headers/request-info-headers.component";
+import { RequestInfoComponent } from "./request-info/request-info.component";
+import { RequestItemComponent } from "./request-list/request-item/request-item.component";
+import { RequestListComponent } from "./request-list/request-list.component";
+import { RequestMapComponent } from "./request-map/request-map.component";
+import { ProxyEffects } from "./store/proxy.effects";
+import { reducer } from "./store/proxy.reducer";
 
 @NgModule({
   declarations: [
@@ -28,11 +27,9 @@ import { RequestMapComponent } from './request-map/request-map.component';
     CommonModule,
     SharedModule,
     EffectsModule.forFeature([ProxyEffects]),
-    StoreModule.forFeature('proxy', reducer)
+    StoreModule.forFeature("proxy", reducer),
   ],
-  entryComponents: [
-    RequestMapComponent
-  ]
+  exports: [ProxyComponent],
+  entryComponents: [RequestMapComponent],
 })
-export class ProxyModule {
-}
+export class ProxyModule {}

@@ -1,6 +1,7 @@
 {
   "name": "dodger",
   "version": "2.0.0",
+  "private": true,
   "scripts": {
     "start": "ng serve custom",
     "serve": "node ./projects/electron/preserve.js && ng serve electron --port=5200",
@@ -9,7 +10,6 @@
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
-  "private": true,
   "dependencies": {
     "@angular/animations": "~8.2.14",
     "@angular/cdk": "~8.2.3",
@@ -25,12 +25,13 @@
     "@ngrx/effects": "^8.5.2",
     "@ngrx/store": "^8.5.2",
     "@ngrx/store-devtools": "^8.5.2",
+    "@types/http-proxy": "^1.17.9",
     "hammerjs": "^2.0.8",
+    "http-proxy": "^1.18.1",
     "rxjs": "~6.5.3",
+    "tree-kill": "^1.2.1",
     "tslib": "^1.10.0",
-    "zone.js": "~0.9.1",
-    "http-proxy": "^1.18.0",
-    "tree-kill": "^1.2.1"
+    "zone.js": "~0.9.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.803.19",

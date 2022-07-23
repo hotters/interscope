@@ -12,10 +12,8 @@ Run `ng serve electron` for a dev server.
 
 Run `ng build electron`
 
-## Builder Deps
+## Setup
 
-`electron`, `electron-builder`, `tree-kill`
+To set up Proxy use `127.0.0.1:8888`.
 
-## Proxy Deps
-
-`http-proxy`, `nodemon` (global)
+To get requests locally use your IP address e.g. `192.168.0.1:3000`

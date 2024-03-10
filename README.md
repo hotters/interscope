@@ -1,4 +1,4 @@
-# Dodger2
+# interscope
 
 Useful Development Proxy for Web Inspection
 
